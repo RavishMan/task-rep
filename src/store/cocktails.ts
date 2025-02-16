@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { ref, type Ref } from 'vue'
+import { availableCodes } from '@/consts'
 import type {
   Drink,
   ICocktailsResponse,
   IngredientPair,
   IRawCocktailDrink,
-} from '@/store/cocktails.types'
-import { availableCodes } from '@/consts'
+} from '@/types/cocktails.ts'
 
 const BASE_URL =
   import.meta.env.VITE_COCKTAILS_API_BASE_URL ||
@@ -88,63 +88,43 @@ export const useCocktailsStore = defineStore('cocktails', () => {
   }
 
   function parseIngredients(rawDrink: IRawCocktailDrink): IngredientPair[] {
-    const typedDrink = rawDrink as Record<string, string | null | undefined>
+    const keys = Object.keys(rawDrink) as (keyof IRawCocktailDrink)[]
 
-    const ingredientMap: Record<
-      string,
-      { ingredient?: string | null; measure?: string | null }
-    > = {}
+    const ingredientKeys = keys.filter((key) => key.startsWith('strIngredient'))
+    const measureKeys = keys.filter((key) => key.startsWith('strMeasure'))
 
-    for (const fieldName in typedDrink) {
-      const fieldValue = typedDrink[fieldName]
-      const isEmptyValue = !fieldValue
-      if (isEmptyValue) {
-        continue
-      }
+    const hasMismatch = ingredientKeys.length !== measureKeys.length
 
-      const isIngredientKey = fieldName.startsWith('strIngredient')
-      const isMeasureKey = fieldName.startsWith('strMeasure')
-
-      if (isIngredientKey) {
-        const suffix = fieldName.slice('strIngredient'.length)
-        ingredientMap[suffix] ??= {}
-        ingredientMap[suffix].ingredient = fieldValue
-      } else if (isMeasureKey) {
-        const suffix = fieldName.slice('strMeasure'.length)
-        ingredientMap[suffix] ??= {}
-        ingredientMap[suffix].measure = fieldValue
-      }
+    if (hasMismatch) {
+      console.warn('Количество ингредиентов и пропорций не совпадает.')
     }
 
-    const ingredientPairs: IngredientPair[] = []
+    return ingredientKeys
+      .map((ingredientKey, index) => {
+        const measureKey = measureKeys[index]
+        const ingredient = rawDrink[ingredientKey]
+        const measure = rawDrink[measureKey]
 
-    // Я возможно слишком увлекся в отрицательные кейсы
-    for (const suffix of Object.keys(ingredientMap)) {
-      const { ingredient, measure } = ingredientMap[suffix]
+        const hasIngredient = Boolean(ingredient)
+        const hasMeasure = Boolean(measure)
 
-      const hasIngredient = Boolean(ingredient)
-      const hasMeasure = Boolean(measure)
+        const missingIngredient = !hasIngredient && hasMeasure
+        const missingMeasure = hasIngredient && !hasMeasure
 
-      if (!hasIngredient && hasMeasure) {
-        console.error(`Пропущен ингредиент для пропорции #${suffix}`)
-        continue
-      }
+        if (missingIngredient) {
+          console.error(`Пропущен ингредиент для пропорции #${index + 1}`)
+          return null
+        }
 
-      if (hasIngredient && !hasMeasure) {
-        console.warn(`Пропущена пропорция для ингредиента #${suffix}`)
-      }
+        if (missingMeasure) {
+          console.warn(`Пропущена пропорция для ингредиента #${index + 1}`)
+        }
 
-      if (!hasIngredient) {
-        continue
-      }
-
-      ingredientPairs.push({
-        ingredient: ingredient as string, // точно не null, раз hasIngredient true
-        measure: measure ?? null,
+        return hasIngredient ? { ingredient, measure: measure ?? null } : null
       })
-    }
-
-    return ingredientPairs
+      .filter((item) => {
+        return item !== null
+      }) as IngredientPair[]
   }
 
   return {

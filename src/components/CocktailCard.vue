@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Drink } from '@/store/cocktails.types'
+import type { Drink } from '@/types/cocktails.ts'
 
 defineProps<{
   drink: Drink
