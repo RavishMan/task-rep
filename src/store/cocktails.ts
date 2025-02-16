@@ -9,6 +9,8 @@ import type {
 } from '@/store/cocktails.types'
 import { availableCodes } from '@/consts'
 
+const BASE_URL = import.meta.env.VITE_COCKTAILS_API_BASE_URL || 'https://www.thecocktaildb.com/api/json/v1/1';
+
 export type CocktailCode = (typeof availableCodes)[number]
 
 export const useCocktailsStore = defineStore('cocktails', () => {
@@ -32,7 +34,7 @@ export const useCocktailsStore = defineStore('cocktails', () => {
       isLoading.value = true
       errorMessage.value = null
 
-      const url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${code}`
+      const url = `${BASE_URL}/search.php?s=${code}`
       const response = await axios.get<ICocktailsResponse>(url)
       const drinks = response.data.drinks?.map(formatDrink) ?? []
 
