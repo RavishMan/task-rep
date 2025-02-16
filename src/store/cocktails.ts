@@ -9,7 +9,9 @@ import type {
 } from '@/store/cocktails.types'
 import { availableCodes } from '@/consts'
 
-const BASE_URL = import.meta.env.VITE_COCKTAILS_API_BASE_URL || 'https://www.thecocktaildb.com/api/json/v1/1';
+const BASE_URL =
+  import.meta.env.VITE_COCKTAILS_API_BASE_URL ||
+  'https://www.thecocktaildb.com/api/json/v1/1'
 
 export type CocktailCode = (typeof availableCodes)[number]
 
