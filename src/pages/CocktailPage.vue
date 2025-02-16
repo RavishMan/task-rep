@@ -44,10 +44,8 @@ watch(
   { immediate: true },
 )
 
-// Список коктейлей
 const cocktails = computed(() => store.getCocktails(cocktailCode.value))
 
-// Флаги и сообщение об ошибке
 const isLoading = computed(() => store.isLoading)
 const errorMessage = computed(() => store.errorMessage)
 </script>

@@ -60,7 +60,6 @@ export const useCocktailsStore = defineStore('cocktails', () => {
     return (availableCodes as readonly string[]).includes(code)
   }
 
-  // Превращаем сырой ответ в удобный формат
   function formatDrink(drink: IRawCocktailDrink): Drink {
     return {
       idDrink: drink.idDrink,

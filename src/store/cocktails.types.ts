@@ -1,8 +1,3 @@
-export interface IngredientMeasure {
-  ingredient?: string | null
-  measure?: string | null
-}
-
 export interface IRawCocktailDrink {
   idDrink: string
   strDrink: string
@@ -27,8 +22,6 @@ export interface IRawCocktailDrink {
   dateModified?: string | null
 
   [key: string]: string | null | undefined
-  [key: `strIngredient${number}`]: string | null | undefined
-  [key: `strMeasure${number}`]: string | null | undefined
 }
 
 export interface ICocktailsResponse {
