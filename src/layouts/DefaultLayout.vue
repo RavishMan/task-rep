@@ -3,11 +3,11 @@
     <div class="layout__container">
       <div class="layout__content">
         <aside class="layout__menu">
-          <SideMenu/>
+          <SideMenu />
         </aside>
 
         <main class="layout__main">
-          <router-view/>
+          <router-view />
         </main>
       </div>
     </div>
@@ -15,11 +15,10 @@
 </template>
 
 <script lang="ts" setup>
- import SideMenu from '@/components/SideMenu.vue'
+import SideMenu from '@/components/SideMenu.vue'
 </script>
 
 <style scoped lang="scss">
-
 .layout {
   min-height: 100vh;
   display: flex;
@@ -64,7 +63,6 @@
   }
 }
 
-
 .layout__container {
   width: 100%;
   margin: 0 auto;
@@ -74,5 +72,4 @@
     max-width: 1024px;
   }
 }
-
 </style>

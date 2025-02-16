@@ -25,16 +25,16 @@ const router = createRouter({
               return next({ name: 'NotFound' })
             }
             next()
-          }
+          },
         },
         {
           path: '/:pathMatch(.*)*',
           name: 'NotFound',
-          component: NotFoundPage
-        }
-      ]
-    }
-  ]
+          component: NotFoundPage,
+        },
+      ],
+    },
+  ],
 })
 
 export default router

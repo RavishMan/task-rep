@@ -1,5 +1,5 @@
 export default {
-    semi: false,
-    singleQuote: true,
-    printWidth: 80
+  semi: false,
+  singleQuote: true,
+  printWidth: 80,
 }

@@ -1,14 +1,12 @@
 <template>
   <nav class="side-menu">
     <ul class="side-menu__list">
-      <li
-        v-for="code in codes"
-        :key="code"
-        :class="[
-          'side-menu__item',
-        ]"
-      >
-        <router-link active-class="side-menu__link--active" :to="`/${code}`" class="side-menu__link">
+      <li v-for="code in codes" :key="code" :class="['side-menu__item']">
+        <router-link
+          active-class="side-menu__link--active"
+          :to="`/${code}`"
+          class="side-menu__link"
+        >
           {{ code.toUpperCase() }}
         </router-link>
       </li>
@@ -17,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { availableCodes } from "@/consts";
+import { availableCodes } from '@/consts'
 const codes = availableCodes
 </script>
 
