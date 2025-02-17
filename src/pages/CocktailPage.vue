@@ -27,11 +27,13 @@ import { computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCocktailsStore } from '@/store/cocktails'
 import CocktailCard from '@/components/CocktailCard.vue'
+import { storeToRefs } from 'pinia'
 
-const route = useRoute()
-const store = useCocktailsStore()
+const route = useRoute();
+const store = useCocktailsStore();
+const { isLoading, errorMessage } = storeToRefs(store);
 
-const cocktailCode = computed(() => route.params.cocktailCode as string)
+const cocktailCode = computed(() => route.params.cocktailCode as string);
 
 watch(
   () => cocktailCode.value,
@@ -45,9 +47,6 @@ watch(
 )
 
 const cocktails = computed(() => store.getCocktails(cocktailCode.value))
-
-const isLoading = computed(() => store.isLoading)
-const errorMessage = computed(() => store.errorMessage)
 </script>
 
 <style scoped lang="scss">
